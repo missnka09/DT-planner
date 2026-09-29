@@ -1,113 +1,122 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>DT Teacher Planner</title>
- 
+
 <style>
- 
+
 body{
-font-family: Arial, sans-serif;
-margin:0;
+font-family:Arial,sans-serif;
 background:#f4f6f8;
+margin:0;
 }
- 
+
 header{
 background:#003366;
 color:white;
+padding:15px;
 text-align:center;
-padding:20px;
 }
- 
+
 .card{
 background:white;
 margin:12px;
 padding:15px;
 border-radius:12px;
-box-shadow:0 2px 6px rgba(0,0,0,0.12);
+box-shadow:0 2px 6px rgba(0,0,0,.1);
 }
- 
+
 h2{
 margin-top:0;
 }
- 
-label{
-display:block;
-margin-top:10px;
-margin-bottom:5px;
-font-weight:bold;
-}
- 
-input,
-textarea,
-select{
+
+input,textarea,select{
 width:100%;
 padding:10px;
-border:1px solid #ccc;
-border-radius:8px;
+margin-top:5px;
+margin-bottom:10px;
 box-sizing:border-box;
+border-radius:8px;
+border:1px solid #ccc;
 }
- 
-textarea{
-min-height:90px;
-resize:vertical;
-}
- 
+
 button{
-width:100%;
 background:#0078d4;
 color:white;
 border:none;
-padding:14px;
+padding:12px;
 border-radius:8px;
-font-size:16px;
-margin-top:15px;
-cursor:pointer;
+width:100%;
 }
- 
-button:hover{
-background:#005ea6;
+
+.task{
+display:flex;
+margin-bottom:8px;
 }
- 
-.saved{
-color:green;
-text-align:center;
-margin-top:10px;
-font-weight:bold;
+
+.task input{
+flex:1;
+margin-right:8px;
 }
- 
+
+.small{
+font-size:14px;
+color:#666;
+}
+
 </style>
 </head>
- 
 <body>
- 
+
 <header>
 <h1>DT Teacher Planner</h1>
 </header>
- 
+
 <div class="card">
- 
-<h2>Select Class</h2>
- 
-<select id="classSelect"></select>
- 
+
+<h2>Dashboard</h2>
+
+<p id="classCount"></p>
+
+<p class="small">
+Keep track of all DT and Construction classes.
+</p>
+
 </div>
- 
+
 <div class="card">
- 
+
+<h2>Tasks</h2>
+
+<div class="task">
+<input id="taskInput" placeholder="Add a task">
+<button onclick="addTask()">Add</button>
+</div>
+
+<ul id="taskList"></ul>
+
+</div>
+
+<div class="card">
+
+<h2>Select Class</h2>
+
+<select id="classSelect"></select>
+
 <label>Current Topic</label>
-<input id="topic" placeholder="e.g. CAD and CAM">
- 
+<input id="topic">
+
 <label>Current Lesson</label>
-<input id="lesson" placeholder="e.g. Lesson 4">
- 
+<input id="lesson">
+
 <label>Homework</label>
-<textarea id="homework" placeholder="Homework details"></textarea>
- 
+<textarea id="homework"></textarea>
+
 <label>Assessment Notes</label>
-<textarea id="assessment" placeholder="Assessment information"></textarea>
- 
+<textarea id="assessment"></textarea>
+
 <label>Progress</label>
 <select id="progress">
 <option>On Track</option>
@@ -115,146 +124,170 @@ font-weight:bold;
 <option>Behind</option>
 <option>Needs Intervention</option>
 </select>
- 
+
 <label>General Notes</label>
-<textarea id="notes" placeholder="Class notes"></textarea>
- 
+<textarea id="notes"></textarea>
+
 <label>Next Actions</label>
-<textarea id="actions" placeholder="Things to do before next lesson"></textarea>
- 
-<button onclick="saveClass()">Save Class Information</button>
- 
-<div class="saved" id="savedMessage"></div>
- 
+<textarea id="actions"></textarea>
+
+<button onclick="saveClass()">
+Save Class
+</button>
+
+<p id="saveMessage"></p>
+
 </div>
- 
+
 <script>
- 
+
 const classes = [
- 
+
 "7X DT4",
 "7X DT5",
 "7X DT2",
 "7W DT4",
 "7W DT2",
- 
+
 "8W DT2",
 "8W DT4",
 "8W DT5",
 "8X DT2",
 "8X DT4",
- 
+
 "9W DT2",
 "9W DT4",
 "9X DT2",
 "9X DT4",
 "9X DT5",
- 
+
 "10B CN1",
 "10D CN1"
- 
+
 ];
- 
-const classSelect =
+
+const select =
 document.getElementById("classSelect");
- 
-classes.forEach(className => {
- 
+
+classes.forEach(c=>{
+
 let option =
 document.createElement("option");
- 
-option.value = className;
-option.textContent = className;
- 
-classSelect.appendChild(option);
- 
+
+option.textContent=c;
+option.value=c;
+
+select.appendChild(option);
+
 });
- 
+
+document.getElementById("classCount")
+.innerHTML =
+"<strong>" + classes.length +
+"</strong> classes loaded";
+
 function saveClass(){
- 
-const className = classSelect.value;
- 
-const data = {
- 
-topic:
-document.getElementById("topic").value,
- 
-lesson:
-document.getElementById("lesson").value,
- 
-homework:
-document.getElementById("homework").value,
- 
-assessment:
-document.getElementById("assessment").value,
- 
-progress:
-document.getElementById("progress").value,
- 
-notes:
-document.getElementById("notes").value,
- 
-actions:
-document.getElementById("actions").value
- 
+
+const data={
+
+topic:topic.value,
+lesson:lesson.value,
+homework:homework.value,
+assessment:assessment.value,
+progress:progress.value,
+notes:notes.value,
+actions:actions.value
+
 };
- 
+
 localStorage.setItem(
-className,
+select.value,
 JSON.stringify(data)
 );
- 
-document.getElementById("savedMessage").innerText =
-"✓ Saved";
- 
-setTimeout(() => {
- 
-document.getElementById("savedMessage").innerText = "";
- 
-}, 2000);
- 
+
+saveMessage.innerHTML =
+"✅ Saved";
+
 }
- 
+
 function loadClass(){
- 
-const className = classSelect.value;
- 
+
 const data =
 JSON.parse(
-localStorage.getItem(className)
+localStorage.getItem(select.value)
 ) || {};
- 
-document.getElementById("topic").value =
-data.topic || "";
- 
-document.getElementById("lesson").value =
-data.lesson || "";
- 
-document.getElementById("homework").value =
-data.homework || "";
- 
-document.getElementById("assessment").value =
-data.assessment || "";
- 
-document.getElementById("progress").value =
-data.progress || "On Track";
- 
-document.getElementById("notes").value =
-data.notes || "";
- 
-document.getElementById("actions").value =
-data.actions || "";
- 
+
+topic.value=data.topic||"";
+lesson.value=data.lesson||"";
+homework.value=data.homework||"";
+assessment.value=data.assessment||"";
+progress.value=data.progress||"On Track";
+notes.value=data.notes||"";
+actions.value=data.actions||"";
+
 }
- 
-classSelect.addEventListener(
+
+select.addEventListener(
 "change",
 loadClass
 );
- 
+
 loadClass();
- 
+
+function addTask(){
+
+const text =
+document.getElementById("taskInput").value;
+
+if(!text) return;
+
+let tasks =
+JSON.parse(
+localStorage.getItem("tasks")
+) || [];
+
+tasks.push(text);
+
+localStorage.setItem(
+"tasks",
+JSON.stringify(tasks)
+);
+
+document.getElementById("taskInput").value="";
+
+renderTasks();
+
+}
+
+function renderTasks(){
+
+let tasks =
+JSON.parse(
+localStorage.getItem("tasks")
+) || [];
+
+const list =
+document.getElementById("taskList");
+
+list.innerHTML="";
+
+tasks.forEach(task=>{
+
+let li =
+document.createElement("li");
+
+li.textContent =
+task;
+
+list.appendChild(li);
+
+});
+
+}
+
+renderTasks();
+
 </script>
- 
+
 </body>
 </html>
