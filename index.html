@@ -4,13 +4,209 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>DT Teacher Planner</title>
-</head>
  
+<style>
+ 
+body{
+font-family:Arial,sans-serif;
+margin:0;
+background:#f5f5f5;
+}
+ 
+header{
+background:#003366;
+color:white;
+padding:15px;
+text-align:center;
+}
+ 
+.card{
+background:white;
+margin:10px;
+padding:15px;
+border-radius:10px;
+box-shadow:0 2px 4px rgba(0,0,0,.1);
+}
+ 
+select,input,textarea{
+width:100%;
+padding:10px;
+margin-top:8px;
+margin-bottom:12px;
+box-sizing:border-box;
+}
+ 
+button{
+background:#0078d4;
+color:white;
+border:none;
+padding:12px;
+border-radius:8px;
+width:100%;
+}
+ 
+h3{
+margin-top:0;
+}
+ 
+</style>
+ 
+</head>
 <body>
  
+<header>
 <h1>DT Teacher Planner</h1>
+</header>
  
-<p>If you can see this page, the app is working.</p>
+<div class="card">
+ 
+<h3>Class</h3>
+ 
+<select id="classSelect"></select>
+ 
+</div>
+ 
+<div class="card">
+ 
+<h3>Current Topic</h3>
+<input id="topic">
+ 
+<h3>Current Lesson</h3>
+<input id="lesson">
+ 
+<h3>Progress</h3>
+ 
+<select id="progress">
+ 
+<option>On Track</option>
+<option>Ahead</option>
+<option>Behind</option>
+ 
+</select>
+ 
+<h3>Notes</h3>
+ 
+<textarea id="notes" rows="5"></textarea>
+ 
+<h3>Next Actions</h3>
+ 
+<textarea id="actions" rows="5"></textarea>
+ 
+<button onclick="saveClass()">
+ 
+Save
+ 
+</button>
+ 
+</div>
+ 
+<script>
+ 
+const classes = [
+ 
+"7X DT4",
+"7X DT5",
+"7X DT2",
+"7W DT4",
+"7W DT2",
+"8W DT2",
+"8W DT4",
+"8W DT5",
+"8X DT2",
+"8X DT4",
+"9W DT2",
+"9W DT4",
+"9X DT2",
+"9X DT4",
+"9X DT5",
+"10B CN1",
+"10D CN1"
+ 
+];
+ 
+const select =
+document.getElementById("classSelect");
+ 
+classes.forEach(c=>{
+ 
+const o =
+document.createElement("option");
+ 
+o.textContent = c;
+o.value = c;
+ 
+select.appendChild(o);
+ 
+});
+ 
+function saveClass(){
+ 
+const className =
+select.value;
+ 
+const data = {
+ 
+topic:
+document.getElementById("topic").value,
+ 
+lesson:
+document.getElementById("lesson").value,
+ 
+progress:
+document.getElementById("progress").value,
+ 
+notes:
+document.getElementById("notes").value,
+ 
+actions:
+document.getElementById("actions").value
+ 
+};
+ 
+localStorage.setItem(
+className,
+JSON.stringify(data)
+);
+ 
+alert("Saved");
+ 
+}
+ 
+function loadClass(){
+ 
+const className =
+select.value;
+ 
+const data =
+JSON.parse(
+localStorage.getItem(className)
+) || {};
+ 
+topic.value =
+data.topic || "";
+ 
+lesson.value =
+data.lesson || "";
+ 
+progress.value =
+data.progress || "On Track";
+ 
+notes.value =
+data.notes || "";
+ 
+actions.value =
+data.actions || "";
+ 
+}
+ 
+select.addEventListener(
+"change",
+loadClass
+);
+ 
+loadClass();
+ 
+</script>
  
 </body>
 </html>
