@@ -517,24 +517,60 @@ p5.value=data.p5 || "";
 }
 
 function showToday(){
-
+ 
 const data =
 JSON.parse(
 localStorage.getItem(
 currentWeek.value + "-" + currentDay.value
 )
 ) || {};
-
-todayLessons.innerHTML =
-
-"<div class='lesson'>P1 - " + (data.p1 || "Free") + "</div>" +
-"<div class='lesson'>P2 - " + (data.p2 || "Free") + "</div>" +
-"<div class='lesson'>P3 - " + (data.p3 || "Free") + "</div>" +
-"<div class='lesson'>P4 - " + (data.p4 || "Free") + "</div>" +
-"<div class='lesson'>P5 - " + (data.p5 || "Free") + "</div>";
-
+ 
+const lessons = [
+data.p1 || "Free",
+data.p2 || "Free",
+data.p3 || "Free",
+data.p4 || "Free",
+data.p5 || "Free"
+];
+ 
+todayLessons.innerHTML="";
+ 
+lessons.forEach((lesson,index)=>{
+ 
+let div =
+document.createElement("div");
+ 
+div.className="lesson";
+ 
+div.innerHTML=`
+<strong>P${index+1}</strong><br>
+${lesson}
+<br><br>
+<button onclick="openClass('${lesson}')">
+📚 Open Class
+</button>
+`;
+ 
+todayLessons.appendChild(div);
+ 
+});
+ 
 }
 
+ function openClass(className){
+ 
+if(!classes.includes(className)){
+return;
+}
+ 
+showScreen("classes");
+ 
+classSelect.value = className;
+ 
+loadClass();
+ 
+}   
+    
 document
 .getElementById("searchBox")
 .addEventListener("input", function(){
