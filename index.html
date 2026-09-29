@@ -290,29 +290,6 @@ Add Task
 </div>
 
 <script type="module">
-
-const classes = [
-
-"7X DT4",
-"7X DT5",
-"7X DT2",
-"7W DT4",
-"7W DT2",
-"8W DT2",
-"8W DT4",
-"8W DT5",
-"8X DT2",
-"8X DT4",
-"9W DT2",
-"9W DT4",
-"9X DT2",
-"9X DT4",
-"9X DT5",
-"10B CN1",
-"10D CN1"
-
-];
-    
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
  
 import {
@@ -335,6 +312,29 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
  
 console.log("Firebase Connected");
+const classes = [
+
+"7X DT4",
+"7X DT5",
+"7X DT2",
+"7W DT4",
+"7W DT2",
+"8W DT2",
+"8W DT4",
+"8W DT5",
+"8X DT2",
+"8X DT4",
+"9W DT2",
+"9W DT4",
+"9X DT2",
+"9X DT4",
+"9X DT5",
+"10B CN1",
+"10D CN1"
+
+];
+    
+
 const classSelect =
 document.getElementById("classSelect");
 
