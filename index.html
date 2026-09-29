@@ -1,69 +1,111 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>DT Teacher Planner</title>
+<title>🌸 DT Teacher Planner</title>
 
 <style>
 
 body{
-font-family:Arial,sans-serif;
-background:#f4f6f8;
-margin:0;
+    font-family: Arial, sans-serif;
+    margin:0;
+    background:#fff0f5;
+    padding-bottom:80px;
 }
 
 header{
-background:#003366;
-color:white;
-padding:15px;
-text-align:center;
+    background:#d63384;
+    color:white;
+    text-align:center;
+    padding:18px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.2);
+}
+
+.screen{
+    display:none;
+    padding:12px;
+}
+
+.active{
+    display:block;
 }
 
 .card{
-background:white;
-margin:12px;
-padding:15px;
-border-radius:12px;
-box-shadow:0 2px 6px rgba(0,0,0,.1);
+    background:#fff8fb;
+    padding:15px;
+    margin-bottom:12px;
+    border-radius:15px;
+    border-left:6px solid #d63384;
+    box-shadow:0 3px 6px rgba(214,51,132,.15);
+}
+
+h1{
+    margin:0;
 }
 
 h2{
-margin-top:0;
+    margin-top:0;
+    color:#d63384;
 }
 
-input,textarea,select{
-width:100%;
-padding:10px;
-margin-top:5px;
-margin-bottom:10px;
-box-sizing:border-box;
-border-radius:8px;
-border:1px solid #ccc;
+input,
+textarea,
+select{
+    width:100%;
+    padding:10px;
+    margin-top:5px;
+    margin-bottom:10px;
+    border:2px solid #f7b2d0;
+    border-radius:10px;
+    box-sizing:border-box;
 }
 
 button{
-background:#0078d4;
-color:white;
-border:none;
-padding:12px;
-border-radius:8px;
-width:100%;
+    width:100%;
+    padding:12px;
+    background:#d63384;
+    color:white;
+    border:none;
+    border-radius:10px;
+    font-weight:bold;
+    margin-bottom:10px;
 }
 
-.task{
-display:flex;
-margin-bottom:8px;
+button:hover{
+    background:#c2185b;
 }
 
-.task input{
-flex:1;
-margin-right:8px;
+.lesson{
+    background:#ffe4ef;
+    padding:10px;
+    border-radius:10px;
+    margin-bottom:6px;
 }
 
-.small{
-font-size:14px;
-color:#666;
+.bottomnav{
+    position:fixed;
+    bottom:0;
+    width:100%;
+    display:flex;
+    background:white;
+    border-top:3px solid #f7b2d0;
+}
+
+.bottomnav button{
+    flex:1;
+    background:white;
+    color:#d63384;
+    margin:0;
+    border-radius:0;
+}
+
+.badge{
+    background:#d63384;
+    color:white;
+    display:inline-block;
+    padding:5px 10px;
+    border-radius:20px;
 }
 
 </style>
@@ -71,37 +113,94 @@ color:#666;
 <body>
 
 <header>
-<h1>DT Teacher Planner</h1>
+<h1>🌸 DT Teacher Planner</h1>
 </header>
+
+<!-- HOME -->
+
+<div id="home" class="screen active">
 
 <div class="card">
 
 <h2>Dashboard</h2>
 
-<p id="classCount"></p>
+<p><span class="badge">17 Classes Loaded</span></p>
 
-<p class="small">
-Keep track of all DT and Construction classes.
-</p>
+<label>Week</label>
+<select id="currentWeek">
+<option>A</option>
+<option>B</option>
+</select>
+
+<label>Day</label>
+<select id="currentDay">
+<option>Monday</option>
+<option>Tuesday</option>
+<option>Wednesday</option>
+<option>Thursday</option>
+<option>Friday</option>
+</select>
+
+<button onclick="showToday()">
+Show Today's Lessons
+</button>
+
+<div id="todayLessons"></div>
 
 </div>
+
+</div>
+
+<!-- TIMETABLE -->
+
+<div id="timetable" class="screen">
 
 <div class="card">
 
-<h2>Tasks</h2>
+<h2>📅 Timetable Editor</h2>
 
-<div class="task">
-<input id="taskInput" placeholder="Add a task">
-<button onclick="addTask()">Add</button>
+<label>Week</label>
+<select id="week">
+<option>A</option>
+<option>B</option>
+</select>
+
+<label>Day</label>
+<select id="day">
+<option>Monday</option>
+<option>Tuesday</option>
+<option>Wednesday</option>
+<option>Thursday</option>
+<option>Friday</option>
+</select>
+
+<input id="p1" placeholder="Period 1">
+<input id="p2" placeholder="Period 2">
+<input id="p3" placeholder="Period 3">
+<input id="p4" placeholder="Period 4">
+<input id="p5" placeholder="Period 5">
+
+<button onclick="saveTimetable()">
+Save Timetable
+</button>
+
+<button onclick="loadTimetableEditor()">
+Load Timetable
+</button>
+
 </div>
 
-<ul id="taskList"></ul>
-
 </div>
+
+<!-- CLASSES -->
+
+<div id="classes" class="screen">
 
 <div class="card">
 
-<h2>Select Class</h2>
+<h2>📚 Class Tracker</h2>
+
+<input id="searchBox" placeholder="Search class">
 
 <select id="classSelect"></select>
 
@@ -111,11 +210,9 @@ Keep track of all DT and Construction classes.
 <label>Current Lesson</label>
 <input id="lesson">
 
-<label>Homework</label>
-<textarea id="homework"></textarea>
-
-<label>Assessment Notes</label>
-<textarea id="assessment"></textarea>
+<button onclick="lessonTaught()">
+✅ Lesson Taught
+</button>
 
 <label>Progress</label>
 <select id="progress">
@@ -125,7 +222,13 @@ Keep track of all DT and Construction classes.
 <option>Needs Intervention</option>
 </select>
 
-<label>General Notes</label>
+<label>Homework</label>
+<textarea id="homework"></textarea>
+
+<label>Assessment Notes</label>
+<textarea id="assessment"></textarea>
+
+<label>Class Notes</label>
 <textarea id="notes"></textarea>
 
 <label>Next Actions</label>
@@ -135,7 +238,49 @@ Keep track of all DT and Construction classes.
 Save Class
 </button>
 
-<p id="saveMessage"></p>
+</div>
+
+</div>
+
+<!-- TASKS -->
+
+<div id="tasks" class="screen">
+
+<div class="card">
+
+<h2>✅ Tasks</h2>
+
+<input id="taskInput" placeholder="Add task">
+
+<button onclick="addTask()">
+Add Task
+</button>
+
+<ul id="taskList"></ul>
+
+</div>
+
+</div>
+
+<!-- NAVIGATION -->
+
+<div class="bottomnav">
+
+<button onclick="showScreen('home')">
+🏠
+</button>
+
+<button onclick="showScreen('timetable')">
+📅
+</button>
+
+<button onclick="showScreen('classes')">
+📚
+</button>
+
+<button onclick="showScreen('tasks')">
+✅
+</button>
 
 </div>
 
@@ -148,43 +293,55 @@ const classes = [
 "7X DT2",
 "7W DT4",
 "7W DT2",
-
 "8W DT2",
 "8W DT4",
 "8W DT5",
 "8X DT2",
 "8X DT4",
-
 "9W DT2",
 "9W DT4",
 "9X DT2",
 "9X DT4",
 "9X DT5",
-
 "10B CN1",
 "10D CN1"
 
 ];
 
-const select =
+const classSelect =
 document.getElementById("classSelect");
 
-classes.forEach(c=>{
+function populateClasses(){
 
-let option =
+classSelect.innerHTML="";
+
+classes.forEach(cls=>{
+
+const option=
 document.createElement("option");
 
-option.textContent=c;
-option.value=c;
+option.value=cls;
+option.textContent=cls;
 
-select.appendChild(option);
+classSelect.appendChild(option);
 
 });
 
-document.getElementById("classCount")
-.innerHTML =
-"<strong>" + classes.length +
-"</strong> classes loaded";
+}
+
+populateClasses();
+
+function showScreen(screen){
+
+document
+.querySelectorAll(".screen")
+.forEach(s=>s.classList.remove("active"));
+
+document
+.getElementById(screen)
+.classList.add("active");
+
+}
 
 function saveClass(){
 
@@ -192,68 +349,75 @@ const data={
 
 topic:topic.value,
 lesson:lesson.value,
+progress:progress.value,
 homework:homework.value,
 assessment:assessment.value,
-progress:progress.value,
 notes:notes.value,
 actions:actions.value
 
 };
 
 localStorage.setItem(
-select.value,
+classSelect.value,
 JSON.stringify(data)
 );
 
-saveMessage.innerHTML =
-"✅ Saved";
+alert("Saved");
 
 }
 
 function loadClass(){
 
-const data =
+const data=
 JSON.parse(
-localStorage.getItem(select.value)
+localStorage.getItem(classSelect.value)
 ) || {};
 
-topic.value=data.topic||"";
-lesson.value=data.lesson||"";
-homework.value=data.homework||"";
-assessment.value=data.assessment||"";
-progress.value=data.progress||"On Track";
-notes.value=data.notes||"";
-actions.value=data.actions||"";
+topic.value=data.topic || "";
+lesson.value=data.lesson || "";
+progress.value=data.progress || "On Track";
+homework.value=data.homework || "";
+assessment.value=data.assessment || "";
+notes.value=data.notes || "";
+actions.value=data.actions || "";
 
 }
 
-select.addEventListener(
+classSelect.addEventListener(
 "change",
 loadClass
 );
 
 loadClass();
 
+function lessonTaught(){
+
+let current =
+parseInt(lesson.value) || 0;
+
+lesson.value = current + 1;
+
+saveClass();
+
+}
+
 function addTask(){
-
-const text =
-document.getElementById("taskInput").value;
-
-if(!text) return;
 
 let tasks =
 JSON.parse(
 localStorage.getItem("tasks")
 ) || [];
 
-tasks.push(text);
+if(taskInput.value==="") return;
+
+tasks.push(taskInput.value);
 
 localStorage.setItem(
 "tasks",
 JSON.stringify(tasks)
 );
 
-document.getElementById("taskInput").value="";
+taskInput.value="";
 
 renderTasks();
 
@@ -266,26 +430,109 @@ JSON.parse(
 localStorage.getItem("tasks")
 ) || [];
 
-const list =
-document.getElementById("taskList");
-
-list.innerHTML="";
+taskList.innerHTML="";
 
 tasks.forEach(task=>{
 
-let li =
+let li=
 document.createElement("li");
 
-li.textContent =
-task;
+li.textContent=task;
 
-list.appendChild(li);
+taskList.appendChild(li);
 
 });
 
 }
 
 renderTasks();
+
+function saveTimetable(){
+
+const data={
+
+p1:p1.value,
+p2:p2.value,
+p3:p3.value,
+p4:p4.value,
+p5:p5.value
+
+};
+
+localStorage.setItem(
+week.value + "-" + day.value,
+JSON.stringify(data)
+);
+
+alert("Timetable saved");
+
+}
+
+function loadTimetableEditor(){
+
+const data =
+JSON.parse(
+localStorage.getItem(
+week.value + "-" + day.value
+)
+) || {};
+
+p1.value=data.p1 || "";
+p2.value=data.p2 || "";
+p3.value=data.p3 || "";
+p4.value=data.p4 || "";
+p5.value=data.p5 || "";
+
+}
+
+function showToday(){
+
+const data =
+JSON.parse(
+localStorage.getItem(
+currentWeek.value + "-" + currentDay.value
+)
+) || {};
+
+todayLessons.innerHTML =
+
+"<div class='lesson'>P1 - " + (data.p1 || "Free") + "</div>" +
+"<div class='lesson'>P2 - " + (data.p2 || "Free") + "</div>" +
+"<div class='lesson'>P3 - " + (data.p3 || "Free") + "</div>" +
+"<div class='lesson'>P4 - " + (data.p4 || "Free") + "</div>" +
+"<div class='lesson'>P5 - " + (data.p5 || "Free") + "</div>";
+
+}
+
+document
+.getElementById("searchBox")
+.addEventListener("input", function(){
+
+const search =
+this.value.toLowerCase();
+
+classSelect.innerHTML="";
+
+classes
+.filter(c =>
+c.toLowerCase().includes(search))
+.forEach(c=>{
+
+const option =
+document.createElement("option");
+
+option.value=c;
+option.textContent=c;
+
+classSelect.appendChild(option);
+
+});
+
+if(classSelect.options.length > 0){
+loadClass();
+}
+
+});
 
 </script>
 
