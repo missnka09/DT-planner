@@ -410,7 +410,10 @@ localStorage.getItem("tasks")
 
 if(taskInput.value==="") return;
 
-tasks.push(taskInput.value);
+tasks.push({
+text:taskInput.value,
+done:false
+});
 
 localStorage.setItem(
 "tasks",
@@ -432,16 +435,44 @@ localStorage.getItem("tasks")
 
 taskList.innerHTML="";
 
-tasks.forEach(task=>{
+tasks.forEach((task,index)=>{
 
-let li=
+let li =
 document.createElement("li");
 
-li.textContent=task;
+li.innerHTML = `
+
+<input
+type="checkbox"
+${task.done ? "checked" : ""}
+onchange="toggleTask(${index})">
+
+${task.text}
+
+`;
 
 taskList.appendChild(li);
 
 });
+
+}
+
+function toggleTask(index){
+
+let tasks =
+JSON.parse(
+localStorage.getItem("tasks")
+) || [];
+
+tasks[index].done =
+!tasks[index].done;
+
+localStorage.setItem(
+"tasks",
+JSON.stringify(tasks)
+);
+
+renderTasks();
 
 }
 
