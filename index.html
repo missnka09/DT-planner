@@ -523,42 +523,34 @@ p5.value=data.p5 || "";
 
 function showToday(){
  
+const key =
+currentWeek.value + "-" + currentDay.value;
+ 
 const data =
 JSON.parse(
-localStorage.getItem(
-currentWeek.value + "-" + currentDay.value
-)
-) || {};
+localStorage.getItem(key)
+);
  
-const lessons = [
-data.p1 || "Free",
-data.p2 || "Free",
-data.p3 || "Free",
-data.p4 || "Free",
-data.p5 || "Free"
-];
+console.log("KEY:", key);
+console.log("DATA:", data);
  
-todayLessons.innerHTML="";
+if(!data){
  
-lessons.forEach((lesson,index)=>{
+todayLessons.innerHTML =
+"<div class='lesson'>No timetable found for " +
+key +
+"</div>";
  
-let div =
-document.createElement("div");
+return;
  
-div.className="lesson";
+}
  
-div.innerHTML=`
-<strong>P${index+1}</strong><br>
-${lesson}
-<br><br>
-<button onclick="openClass('${lesson}')">
-📚 Open Class
-</button>
-`;
- 
-todayLessons.appendChild(div);
- 
-});
+todayLessons.innerHTML =
+"<div class='lesson'>P1 - " + (data.p1 || "Free") + "</div>" +
+"<div class='lesson'>P2 - " + (data.p2 || "Free") + "</div>" +
+"<div class='lesson'>P3 - " + (data.p3 || "Free") + "</div>" +
+"<div class='lesson'>P4 - " + (data.p4 || "Free") + "</div>" +
+"<div class='lesson'>P5 - " + (data.p5 || "Free") + "</div>";
  
 }
 
