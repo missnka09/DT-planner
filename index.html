@@ -154,7 +154,7 @@ button:hover{
 </div>
  
 </div>
-S
+
 
 <!-- TIMETABLE -->
 
@@ -289,7 +289,7 @@ Add Task
 
 </div>
 
-<script>
+<script type="module">
 
 const classes = [
 
@@ -312,7 +312,29 @@ const classes = [
 "10D CN1"
 
 ];
-
+    
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
+ 
+import {
+getFirestore,
+doc,
+getDoc,
+setDoc
+} from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
+ 
+const firebaseConfig = {
+apiKey: "AIzaSyAjUC6Q23lpAiLDiIOFs2VNogPlIJKWRcg",
+authDomain: "dt-planner-4907d.firebaseapp.com",
+projectId: "dt-planner-4907d",
+storageBucket: "dt-planner-4907d.firebasestorage.app",
+messagingSenderId: "30264948841",
+appId: "1:30264948841:web:6e18e88cdaefea3f928af8"
+};
+ 
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+ 
+console.log("Firebase Connected");
 const classSelect =
 document.getElementById("classSelect");
 
@@ -348,10 +370,9 @@ document
 
 }
 
-function saveClass(){
-
+async function saveClass(){
+ 
 const data={
-
 topic:topic.value,
 lesson:lesson.value,
 progress:progress.value,
@@ -359,16 +380,20 @@ homework:homework.value,
 assessment:assessment.value,
 notes:notes.value,
 actions:actions.value
-
 };
-
+ 
 localStorage.setItem(
 classSelect.value,
 JSON.stringify(data)
 );
-
+ 
+await cloudSave(
+classSelect.value,
+data
+);
+ 
 alert("Saved");
-
+ 
 }
 
 function loadClass(){
@@ -406,29 +431,31 @@ saveClass();
 
 }
 
-function addTask(){
-
+async function addTask(){
+ 
 let tasks =
 JSON.parse(
 localStorage.getItem("tasks")
 ) || [];
-
+ 
 if(taskInput.value==="") return;
-
+ 
 tasks.push({
 text:taskInput.value,
 done:false
 });
-
+ 
 localStorage.setItem(
 "tasks",
 JSON.stringify(tasks)
 );
-
+ 
+await cloudSave("tasks", tasks);
+ 
 taskInput.value="";
-
+ 
 renderTasks();
-
+ 
 }
 
 function renderTasks(){
@@ -461,47 +488,52 @@ taskList.appendChild(li);
 });
 
 }
-
-function toggleTask(index){
-
+    
+async function toggleTask(index){
+ 
 let tasks =
 JSON.parse(
 localStorage.getItem("tasks")
 ) || [];
-
+ 
 tasks[index].done =
 !tasks[index].done;
-
+ 
 localStorage.setItem(
 "tasks",
 JSON.stringify(tasks)
 );
-
+ 
+await cloudSave("tasks", tasks);
+ 
 renderTasks();
-
+ 
 }
 
 renderTasks();
 
-function saveTimetable(){
-
+async function saveTimetable(){
+ 
 const data={
-
 p1:p1.value,
 p2:p2.value,
 p3:p3.value,
 p4:p4.value,
 p5:p5.value
-
 };
-
+ 
+const key =
+week.value + "-" + day.value;
+ 
 localStorage.setItem(
-week.value + "-" + day.value,
+key,
 JSON.stringify(data)
 );
-
+ 
+await cloudSave(key,data);
+ 
 alert("Timetable saved");
-
+ 
 }
 
 function loadTimetableEditor(){
@@ -599,7 +631,33 @@ loadClass();
 });
 
     showToday();
-
+async function syncFromCloud(){
+ 
+const snap = await getDoc(
+doc(db,"teachers","missnka09")
+);
+ 
+if(!snap.exists()) return;
+ 
+const data = snap.data();
+ 
+Object.keys(data).forEach(key=>{
+ 
+localStorage.setItem(
+key,
+JSON.stringify(data[key])
+);
+ 
+});
+ 
+renderTasks();
+showToday();
+loadClass();
+ 
+}
+ 
+syncFromCloud();
+    
 </script>
 
 </body>
