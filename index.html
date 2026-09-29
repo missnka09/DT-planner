@@ -289,29 +289,8 @@ Add Task
 
 </div>
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
- 
-import {
-getFirestore,
-doc,
-getDoc,
-setDoc
-} from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
- 
-const firebaseConfig = {
-apiKey: "AIzaSyAjUC6Q23lpAiLDiIOFs2VNogPlIJKWRcg",
-authDomain: "dt-planner-4907d.firebaseapp.com",
-projectId: "dt-planner-4907d",
-storageBucket: "dt-planner-4907d.firebasestorage.app",
-messagingSenderId: "30264948841",
-appId: "1:30264948841:web:6e18e88cdaefea3f928af8"
-};
- 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
- 
-console.log("Firebase Connected");
+    <script>
+        
 const classes = [
 
 "7X DT4",
@@ -450,7 +429,6 @@ localStorage.setItem(
 JSON.stringify(tasks)
 );
  
-await cloudSave("tasks", tasks);
  
 taskInput.value="";
  
@@ -503,8 +481,7 @@ localStorage.setItem(
 "tasks",
 JSON.stringify(tasks)
 );
- 
-await cloudSave("tasks", tasks);
+
  
 renderTasks();
  
@@ -529,8 +506,6 @@ localStorage.setItem(
 key,
 JSON.stringify(data)
 );
- 
-await cloudSave(key,data);
  
 alert("Timetable saved");
  
@@ -631,32 +606,7 @@ loadClass();
 });
 
     showToday();
-async function syncFromCloud(){
- 
-const snap = await getDoc(
-doc(db,"teachers","missnka09")
-);
- 
-if(!snap.exists()) return;
- 
-const data = snap.data();
- 
-Object.keys(data).forEach(key=>{
- 
-localStorage.setItem(
-key,
-JSON.stringify(data[key])
-);
- 
-});
- 
-renderTasks();
-showToday();
-loadClass();
- 
-}
- 
-syncFromCloud();
+
     
 </script>
 
