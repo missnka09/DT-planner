@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -8,50 +8,78 @@
 <style>
  
 body{
-font-family:Arial,sans-serif;
+font-family: Arial, sans-serif;
 margin:0;
-background:#f5f5f5;
+background:#f4f6f8;
 }
  
 header{
 background:#003366;
 color:white;
-padding:15px;
 text-align:center;
+padding:20px;
 }
  
 .card{
 background:white;
-margin:10px;
+margin:12px;
 padding:15px;
-border-radius:10px;
-box-shadow:0 2px 4px rgba(0,0,0,.1);
+border-radius:12px;
+box-shadow:0 2px 6px rgba(0,0,0,0.12);
 }
  
-select,input,textarea{
-width:100%;
-padding:10px;
-margin-top:8px;
-margin-bottom:12px;
-box-sizing:border-box;
-}
- 
-button{
-background:#0078d4;
-color:white;
-border:none;
-padding:12px;
-border-radius:8px;
-width:100%;
-}
- 
-h3{
+h2{
 margin-top:0;
 }
  
-</style>
+label{
+display:block;
+margin-top:10px;
+margin-bottom:5px;
+font-weight:bold;
+}
  
+input,
+textarea,
+select{
+width:100%;
+padding:10px;
+border:1px solid #ccc;
+border-radius:8px;
+box-sizing:border-box;
+}
+ 
+textarea{
+min-height:90px;
+resize:vertical;
+}
+ 
+button{
+width:100%;
+background:#0078d4;
+color:white;
+border:none;
+padding:14px;
+border-radius:8px;
+font-size:16px;
+margin-top:15px;
+cursor:pointer;
+}
+ 
+button:hover{
+background:#005ea6;
+}
+ 
+.saved{
+color:green;
+text-align:center;
+margin-top:10px;
+font-weight:bold;
+}
+ 
+</style>
 </head>
+ 
 <body>
  
 <header>
@@ -60,7 +88,7 @@ margin-top:0;
  
 <div class="card">
  
-<h3>Class</h3>
+<h2>Select Class</h2>
  
 <select id="classSelect"></select>
  
@@ -68,35 +96,35 @@ margin-top:0;
  
 <div class="card">
  
-<h3>Current Topic</h3>
-<input id="topic">
+<label>Current Topic</label>
+<input id="topic" placeholder="e.g. CAD and CAM">
  
-<h3>Current Lesson</h3>
-<input id="lesson">
+<label>Current Lesson</label>
+<input id="lesson" placeholder="e.g. Lesson 4">
  
-<h3>Progress</h3>
+<label>Homework</label>
+<textarea id="homework" placeholder="Homework details"></textarea>
  
+<label>Assessment Notes</label>
+<textarea id="assessment" placeholder="Assessment information"></textarea>
+ 
+<label>Progress</label>
 <select id="progress">
- 
 <option>On Track</option>
 <option>Ahead</option>
 <option>Behind</option>
- 
+<option>Needs Intervention</option>
 </select>
  
-<h3>Notes</h3>
+<label>General Notes</label>
+<textarea id="notes" placeholder="Class notes"></textarea>
  
-<textarea id="notes" rows="5"></textarea>
+<label>Next Actions</label>
+<textarea id="actions" placeholder="Things to do before next lesson"></textarea>
  
-<h3>Next Actions</h3>
+<button onclick="saveClass()">Save Class Information</button>
  
-<textarea id="actions" rows="5"></textarea>
- 
-<button onclick="saveClass()">
- 
-Save
- 
-</button>
+<div class="saved" id="savedMessage"></div>
  
 </div>
  
@@ -109,40 +137,42 @@ const classes = [
 "7X DT2",
 "7W DT4",
 "7W DT2",
+ 
 "8W DT2",
 "8W DT4",
 "8W DT5",
 "8X DT2",
 "8X DT4",
+ 
 "9W DT2",
 "9W DT4",
 "9X DT2",
 "9X DT4",
 "9X DT5",
+ 
 "10B CN1",
 "10D CN1"
  
 ];
  
-const select =
+const classSelect =
 document.getElementById("classSelect");
  
-classes.forEach(c=>{
+classes.forEach(className => {
  
-const o =
+let option =
 document.createElement("option");
  
-o.textContent = c;
-o.value = c;
+option.value = className;
+option.textContent = className;
  
-select.appendChild(o);
+classSelect.appendChild(option);
  
 });
  
 function saveClass(){
  
-const className =
-select.value;
+const className = classSelect.value;
  
 const data = {
  
@@ -151,6 +181,12 @@ document.getElementById("topic").value,
  
 lesson:
 document.getElementById("lesson").value,
+ 
+homework:
+document.getElementById("homework").value,
+ 
+assessment:
+document.getElementById("assessment").value,
  
 progress:
 document.getElementById("progress").value,
@@ -168,38 +204,50 @@ className,
 JSON.stringify(data)
 );
  
-alert("Saved");
+document.getElementById("savedMessage").innerText =
+"✓ Saved";
+ 
+setTimeout(() => {
+ 
+document.getElementById("savedMessage").innerText = "";
+ 
+}, 2000);
  
 }
  
 function loadClass(){
  
-const className =
-select.value;
+const className = classSelect.value;
  
 const data =
 JSON.parse(
 localStorage.getItem(className)
 ) || {};
  
-topic.value =
+document.getElementById("topic").value =
 data.topic || "";
  
-lesson.value =
+document.getElementById("lesson").value =
 data.lesson || "";
  
-progress.value =
+document.getElementById("homework").value =
+data.homework || "";
+ 
+document.getElementById("assessment").value =
+data.assessment || "";
+ 
+document.getElementById("progress").value =
 data.progress || "On Track";
  
-notes.value =
+document.getElementById("notes").value =
 data.notes || "";
  
-actions.value =
+document.getElementById("actions").value =
 data.actions || "";
  
 }
  
-select.addEventListener(
+classSelect.addEventListener(
 "change",
 loadClass
 );
