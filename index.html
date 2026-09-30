@@ -306,7 +306,7 @@ document
 
 }
 
-async function saveClass(){
+function saveClass(){
  
 const data={
 topic:topic.value,
@@ -323,10 +323,6 @@ classSelect.value,
 JSON.stringify(data)
 );
  
-await cloudSave(
-classSelect.value,
-data
-);
  
 alert("Saved");
  
