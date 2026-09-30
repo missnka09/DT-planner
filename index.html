@@ -156,46 +156,6 @@ button:hover{
 </div>
 
 
-<!-- TIMETABLE -->
-
-<div id="timetable" class="screen">
-
-<div class="card">
-
-<h2>📅 Timetable Editor</h2>
-
-<label>Week</label>
-<select id="week">
-<option>A</option>
-<option>B</option>
-</select>
-
-<label>Day</label>
-<select id="day">
-<option>Monday</option>
-<option>Tuesday</option>
-<option>Wednesday</option>
-<option>Thursday</option>
-<option>Friday</option>
-</select>
-
-<input id="p1" placeholder="Period 1">
-<input id="p2" placeholder="Period 2">
-<input id="p3" placeholder="Period 3">
-<input id="p4" placeholder="Period 4">
-<input id="p5" placeholder="Period 5">
-
-<button onclick="saveTimetable()">
-Save Timetable
-</button>
-
-<button onclick="loadTimetableEditor()">
-Load Timetable
-</button>
-
-</div>
-
-</div>
 
 <!-- CLASSES -->
 
@@ -275,9 +235,6 @@ Add Task
 🏠
 </button>
 
-<button onclick="showScreen('timetable')">
-📅
-</button>
 
 <button onclick="showScreen('classes')">
 📚
@@ -489,77 +446,100 @@ renderTasks();
 
 renderTasks();
 
-async function saveTimetable(){
+
+const timetable = {
  
-const data={
-p1:p1.value,
-p2:p2.value,
-p3:p3.value,
-p4:p4.value,
-p5:p5.value
+A:{
+ 
+Monday:{
+p1:"7X DT4",
+p2:"7X DT5",
+p3:"7W DT2",
+p4:"10B CN1",
+p5:"10D CN1"
+},
+ 
+Tuesday:{
+p1:"9X DT5",
+p2:"8W DT4",
+p3:"10D CN1",
+p4:"Free",
+p5:"Free"
+},
+ 
+Wednesday:{
+p1:"Free",
+p2:"10B CN1",
+p3:"Meeting",
+p4:"7X DT2",
+p5:"Free"
+},
+ 
+Thursday:{
+p1:"7W DT4",
+p2:"10B CN1",
+p3:"8W DT2",
+p4:"9X DT2",
+p5:"9W DT2"
+},
+ 
+Friday:{
+p1:"10B CN1",
+p2:"8X DT2",
+p3:"8W DT5",
+p4:"7X DT4",
+p5:"Free"
+}
+ 
+},
+ 
+B:{
+ 
+Monday:{
+p1:"9X DT4",
+p2:"7W DT4",
+p3:"10D CN1",
+p4:"8X DT2",
+p5:"8X DT4"
+},
+ 
+Tuesday:{
+p1:"Free",
+p2:"Free",
+p3:"10B CN1",
+p4:"7X DT2",
+p5:"Free"
+},
+ 
+Wednesday:{
+p1:"8W DT5",
+p2:"7X DT5",
+p3:"10B CN1",
+p4:"9X DT4",
+p5:"9W DT4"
+},
+ 
+Thursday:{
+p1:"9W DT2",
+p2:"10D CN1",
+p3:"8W DT4",
+p4:"8W DT2",
+p5:"9X DT5"
+},
+ 
+Friday:{
+p1:"Meeting",
+p2:"7W DT2",
+p3:"9X DT2",
+p4:"8X DT4",
+p5:"9W DT4"
+}
+ 
+}
+ 
 };
  
-const key =
-week.value + "-" + day.value;
- 
-localStorage.setItem(
-key,
-JSON.stringify(data)
-);
- 
-alert("Timetable saved");
- 
-}
 
-function loadTimetableEditor(){
-
-const data =
-JSON.parse(
-localStorage.getItem(
-week.value + "-" + day.value
-)
-) || {};
-
-p1.value=data.p1 || "";
-p2.value=data.p2 || "";
-p3.value=data.p3 || "";
-p4.value=data.p4 || "";
-p5.value=data.p5 || "";
-
-}
-
-function showToday(){
- 
-const key =
-currentWeek.value + "-" + currentDay.value;
- 
-const data =
-JSON.parse(
-localStorage.getItem(key)
-);
- 
-console.log("KEY:", key);
-console.log("DATA:", data);
- 
-if(!data){
- 
-todayLessons.innerHTML =
-"<div class='lesson'>No timetable found for " +
-key +
-"</div>";
- 
-return;
- 
-}
- 
-todayLessons.innerHTML =
-"<div class='lesson'>P1 - " + (data.p1 || "Free") + "</div>" +
-"<div class='lesson'>P2 - " + (data.p2 || "Free") + "</div>" +
-"<div class='lesson'>P3 - " + (data.p3 || "Free") + "</div>" +
-"<div class='lesson'>P4 - " + (data.p4 || "Free") + "</div>" +
-"<div class='lesson'>P5 - " + (data.p5 || "Free") + "</div>";
- 
-}
 
  function openClass(className){
  
@@ -574,6 +554,15 @@ classSelect.value = className;
 loadClass();
  
 }   
+        currentWeek.addEventListener(
+"change",
+showToday
+);
+ 
+currentDay.addEventListener(
+"change",
+showToday
+);
     
 document
 .getElementById("searchBox")
